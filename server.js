@@ -46,6 +46,7 @@ app.post("/generate-word-from-excel", upload.single("template"), async (req, res
     const employeeName = req.body.employeeName;
     const month = req.body.month || "";
     const year = parseInt(req.body.year) || new Date().getFullYear();
+    const generatedDate = req.body.generatedDate || "";
 
     const content = fs.readFileSync(templateFile, "binary");
     const zip = new PizZip(content);
@@ -61,6 +62,7 @@ app.post("/generate-word-from-excel", upload.single("template"), async (req, res
       employeeName: employeeName,
       month: month,
       year: year,
+      generatedDate: generatedDate,
       ...excelData
     };
 
@@ -99,7 +101,7 @@ app.post("/generate-word-from-excel", upload.single("template"), async (req, res
 
     if (existingReport) {
       // Delete old file from disk
-    if (fs.existsSync(existingReport.report_file)) {
+      if (fs.existsSync(existingReport.report_file)) {
         fs.unlinkSync(existingReport.report_file);
         console.log(`🗑️ Deleted old file: ${existingReport.report_file}`);
       }
